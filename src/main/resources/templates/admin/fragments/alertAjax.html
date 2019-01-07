@@ -1,0 +1,5 @@
+<th:block th:if="${message != null}">
+<!-- /* The message code is returned from the @Controller */ -->
+<div th:replace="admin/fragments/alert :: alert (type=${#strings.toLowerCase(message.type)}, 
+                message=#{${message.message}(${message.getArgs()[0]},${message.getArgs()[1]})}   )">&nbsp;</div>
+</th:block>

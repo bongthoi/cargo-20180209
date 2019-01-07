@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/layout :: head"></head>
+<body class="hold-transition skin-red sidebar-mini">
+<div class="wrapper" style="height: auto;">
+    <header th:replace="admin/fragments/layout :: header"></header>
+  	 <aside th:replace="admin/fragments/layout :: sidebar" class="main-sidebar"></aside>
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->    
+     <section class="content-header">
+      <h1>
+       Users<small th:text="${h1}"> Add Item</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a th:href='@{admin}'><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a th:href='@{admin/User}'th:text='Users'> Users</a></li>
+        <li class="active" th:text="${h1}"> Add</li>
+      </ol>
+    </section>
+    
+    <!-- Main content -->
+    <section class="content">
+    	<div class="row">
+     	
+    		<form method="post" id="frm_user_edit"  novalidate="novalidate" th:action="@{admin/User/save}" th:object="${user}">
+    			<input type="hidden" class="form-control"  th:field="*{persisted}" >
+    			<input type="hidden" class="form-control"  th:field="*{enabled}" >
+    			<div class="col-md-12">
+    					<div class="box box-primary" >     
+    						<div class="box-header with-border">
+    							<h3 class="box-title">User info</h3>
+    								 		  <!-- /* Handle the flash message */-->
+									    <th:block th:if="${message != null}">
+									        <!-- /* The message code is returned from the @Controller */ -->
+									        <div th:replace="admin/fragments/alert :: alert (type=${#strings.toLowerCase(message.type)}, message=#{${message.message}(${#authentication.name})})">&nbsp;</div>
+									    </th:block>
+									      <!-- /* end Handle the flash message */-->
+    						</div>    
+				            <div class="box-body">
+						            <div class="alert alert-danger alert-dismissible" role="alert" th:if="${#fields.hasGlobalErrors()}">
+									  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+									  <ul>
+									  	<li th:each="err : ${#fields.globalErrors()}" ><label class="control-label" th:text="${err}" ></label></li>
+									  </ul>
+										
+									</div>
+						            <div class="col-md-4">
+						           		 <div class="form-group">
+						           						 <label >UserName</label>
+						            					<input type="text" class="form-control"  th:field="*{username}" th:errorclass="field-error" th:readonly="${user.persisted}">
+				               							<label th:if="${#fields.hasErrors('username')}" th:errors="*{username}"  class="error"></label>
+				               				</div>			
+						            
+						            	 <div class="form-group">
+						           						 <label >Password</label>
+						            					<input type="password" class="form-control"  th:field="*{password}" th:errorclass="field-error">
+				               								<label th:if="${#fields.hasErrors('password')}" th:errors="*{password}"  class="error"></label>
+				               				</div>		
+				               				 <div class="form-group">
+						           						 <label >RePassword</label>
+						            					<input type="password" class="form-control"  th:field="*{repassword}" th:errorclass="field-error">
+				               						<label th:if="${#fields.hasErrors('repassword')}" th:errors="*{repassword}"  class="error"></label>
+				               				</div>		
+						            </div>
+						             <div class="col-md-4">
+						             		 <div class="form-group">
+						           						 <label >First Name</label>
+						            					<input type="text" class="form-control"  th:field="*{FirstName}" th:errorclass="field-error">
+				               						<label th:if="${#fields.hasErrors('FirstName')}" th:errors="*{FirstName}"  class="error"></label>
+				               				</div>			
+						            
+						            	 <div class="form-group">
+						           						 <label >Last Name</label>
+						            					<input type="text" class="form-control"  th:field="*{LastName}" th:errorclass="field-error">
+				               							<label th:if="${#fields.hasErrors('LastName')}" th:errors="*{LastName}"  class="error"></label>
+				               				</div>		
+				               				
+				               				<div class="form-group">
+									                <label>Birthday:</label>
+									                <div class="input-group date">
+									                  <div class="input-group-addon">
+									                    <i class="fa fa-calendar"></i>
+									                  </div>
+									                  <input type="text" class="form-control pull-right" id="Birthday-datepicker" th:field="*{Birthday}" th:errorclass="field-error">
+									                </div>
+									                <!-- /.input group -->
+									                <label th:if="${#fields.hasErrors('Birthday')}" th:errors="*{Birthday}"  class="error"></label>
+									              </div>	
+						             </div>
+						              <div class="col-md-4">
+						              			 <div class="form-group">
+						           						 <label >Warehouse</label>
+						           						 <select class="form-control"  th:field="*{PhysicalWarehouseId}" th:errorclass="field-error">
+						           						  		<option value="">---Select---</option>
+															  <option th:each="PhysicalWarehouse : ${PhysicalWarehouses}" 
+															          th:value="${PhysicalWarehouse.id}" 
+															          th:selected="(${PhysicalWarehouse.id} == *{PhysicalWarehouseId})" 
+															          th:disabled="(${PhysicalWarehouse.enabled} == 0)"
+															          th:text="${PhysicalWarehouse.WarehouseName} + (${PhysicalWarehouse.enabled} == 0? '(disabled)':'')">Wireframe</option>
+															</select>
+				               							<label th:if="${#fields.hasErrors('PhysicalWarehouseId')}" th:errors="*{PhysicalWarehouseId}"  class="error"></label>
+				               				</div>			
+						            
+						            	 <div class="form-group">
+						           						 <label >UserGroup</label>
+						           						 	 <select class="form-control"  th:field="*{UserGroupId}" th:errorclass="field-error">
+						           						  		<option value="">---Select---</option>
+															  <option th:each="UserGroup : ${UserGroups}" 
+															          th:value="${UserGroup.id}" 
+															          th:selected="(${UserGroup.id} == *{UserGroupId})" 
+															          th:disabled="(${UserGroup.enabled} == 0)"
+															          th:text="${UserGroup.UserGroupName} + (${UserGroup.enabled} == 0? '(disabled)':'')">Wireframe</option>
+															</select>
+				               						<label th:if="${#fields.hasErrors('UserGroupId')}" th:errors="*{UserGroupId}"  class="error"></label>
+				               				</div>		
+				               				 <div class="form-group">
+						           						 <label >Location</label>
+						           						 	 <select class="form-control"  th:field="*{LocationId}" th:errorclass="field-error">
+						           						  	  <option value="">---Select---</option>
+															  <option th:each="Location : ${Locations}" 
+															          th:value="${Location.id}" 
+															          th:selected="(${Location.id} == *{LocationId})" 
+															          th:disabled="(${Location.enabled} == 0)"
+															          th:text="${Location.LocationName} + (${Location.enabled} == 0? '(disabled)':'')">Wireframe</option>
+															</select>
+						            					
+				               						<label th:if="${#fields.hasErrors('LocationId')}" th:errors="*{LocationId}"  class="error"></label>
+				               				</div>		
+						              </div>
+				          
+				          		
+							</div>
+							 <div class="box-footer">
+							 	<a th:href='@{admin/User}'>Go Back </a>
+								 	<button type="button" class="btn btn-primary" id="btnSaveuser">
+						                <i class="fa fa-save"></i> Save
+						      		</button>
+								 </div>
+				       </div>
+    			</div>
+    		</form>
+    	</div>
+    	
+    	
+	</section>
+    <!-- /.content -->
+  </div>
+	
+  <!-- /.content-wrapper -->
+  
+<script src="js/User/main.js"></script>
+  	
+    <footer th:replace="admin/fragments/layout :: footer"></footer>
+  <!-- /wapper -->  
+  </div>  
+</body>
+</html>

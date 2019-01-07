@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/layout :: head"></head>
+<body class="hold-transition skin-red sidebar-mini">
+<div class="wrapper" style="height: auto;">
+    <header th:replace="admin/fragments/layout :: header"></header>
+  	 <aside th:replace="admin/fragments/layout :: sidebar" class="main-sidebar"></aside>
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->    
+     <section class="content-header">
+      <h1>
+       Goods Receipt Note<small th:text="${h1}"> Info Item</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a th:href='@{admin}'><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a th:href='@{admin/goods_receipt_note}' th:text="'Goods Receipt Note'"> Goods Receipt Note</a></li>
+        <li class="active" th:text="${h1}"> Info</li>
+      </ol>
+    </section>
+    
+   	<div class="pad margin no-print">
+    	  <!-- /* Handle the flash message */-->
+									    <th:block th:if="${message != null}">
+									        <!-- /* The message code is returned from the @Controller */ -->
+									        <div th:replace="admin/fragments/alert :: alert (type=${#strings.toLowerCase(message.type)}, message=#{${message.message}(${#authentication.name})})">&nbsp;</div>
+									    </th:block>			   
+									       <!-- /* end Handle the flash message */-->
+    </div>
+    
+    	<section class="invoice">
+      <!-- title row -->
+      <div class="row">
+        <div class="col-xs-12">
+          <h2 class="page-header">
+           	<span th:text="'#'+${goodsReceiptNote.id}"></span>	
+            <small >
+            	Checked Status:	<span th:replace="admin/fragments/status :: document(status=${goodsReceiptNote.IsCheck})"></span>
+            </small>
+             <small  th:text="'Date: '+ ${#dates.format(goodsReceiptNote.CreateDate, 'dd/MM/yyyy')}">Date: 2/10/2014</small>
+              <small >
+            	Preference Doc:	<span th:text="${goodsReceiptNote.OutPreference}"></span>
+            </small>
+          </h2>
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- info row -->
+      <div class="row invoice-info" style="    margin-bottom: 20px;">
+        <div class="col-sm-4 invoice-col">
+          <b th:text="'Goods Receipt Note: #' + ${goodsReceiptNote.id}">Invoice #007612</b><br>
+          <br>
+          <b>Document No#:</b> <span th:text="${goodsReceiptNote.DocumentNo}">aaaa</span><br>
+          <b>Type :</b><span  th:text="${goodsReceiptNote.TypeofNote}">aaaa</span><br>
+          <th:block  th:if="${isFromSuplier} == false">    <b>From Warehouse:</b> <span th:text="${goodsReceiptNote.FromLogicWarehouse}">aaaa</span><br></th:block>
+          <th:block  th:if="${isFromSuplier} == true">    <b>From Supplier:</b> <span th:text="${goodsReceiptNote.FromLogicWarehouse}">aaaa</span><br></th:block>
+          <b>To Warehouse:</b> <span th:text="${goodsReceiptNote.ToLogicWarehouse}">aaaa</span>
+          
+        </div>
+        <!-- /.col -->
+        <div class="col-sm-4 invoice-col">
+           <b>Note:</b>
+          <address th:text="${goodsReceiptNote.Note}">
+        		
+          </address>
+        </div>
+      </div>
+      <!-- /.row -->
+
+      <!-- Table row -->
+      <div class="row">
+        <div class="col-xs-12 table-responsive">
+          <table class="table table-hover table-bordered">
+            <thead>
+            <tr>
+             		<th style="width=:55px;">#</th>
+					<th class="text-center" style="vertical-align: middle">#Product ID </th>
+						<th class="text-center" style="vertical-align: middle">#Product Code </th>	
+					 <th class="text-center" style="vertical-align: middle">Product Name</th>
+					<th class="text-center" style="vertical-align: middle">Price</th>
+					<th class="text-center" style="vertical-align: middle">Document Quantity</th>
+					 <th class="text-center" style="vertical-align: middle">Real Quantity</th>
+					 <th class="text-center" style="vertical-align: middle">Amount</th>
+			         
+            </tr>
+            </thead>
+            <tbody>
+            	 <th:block th:each="goodsReceiptNoteDetail,status : ${goodsReceiptNote.goodsReceiptNoteDetails}" >
+					<tr class="trDetail" >
+					        <td><span th:text="${status.index + 1 }"></span></td>
+							<td><span  th:text="${goodsReceiptNoteDetail.ProductId}"></span> </td>
+							<td ><span  th:text="${goodsReceiptNoteDetail.ProductCode}"></span></td>
+							<td ><span th:text="${goodsReceiptNoteDetail.ProductName}"></span> </td>
+							<td  class="text-right"> <span th:text="${goodsReceiptNoteDetail.Price} != null AND  ${goodsReceiptNoteDetail.Price}!=0.00 ?  ${#numbers.formatDecimal(goodsReceiptNoteDetail.Price, 0, 'POINT', 2, 'COMMA')} : '0,00'"></span></td>
+							<td  class="text-right"> <span th:text="${goodsReceiptNoteDetail.DocumentQuantity}" ></span></td>
+							<td  class="text-right"> <span th:text="${goodsReceiptNoteDetail.RealQuantity}" ></span></td>
+							<td  class="text-right"> <span th:text="${goodsReceiptNoteDetail.Amount} != null AND  ${goodsReceiptNoteDetail.Amount}!=0.00 ?  ${#numbers.formatDecimal(goodsReceiptNoteDetail.Amount, 0, 'POINT', 2, 'COMMA')} : '0,00'" ></span></td>
+					</tr>
+				</th:block>
+            </tbody>
+          </table>
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+
+      <div class="row">
+        <!-- accepted payments column -->
+        <div class="col-xs-6">
+        
+        </div>
+        <!-- /.col -->
+        <div class="col-xs-6">
+          <p class="lead">Total</p>
+
+          <div class="table-responsive">
+            <table class="table">
+              <tbody><tr>
+                <th style="width:50%">Total Quantity:</th>
+                <td><span th:text="${goodsReceiptNote.TotalQuantity}">aaaa</span></td>
+              </tr>
+              <tr>
+                <th>TotalAmount</th>
+                
+                <td><span th:text="${#numbers.formatDecimal(goodsReceiptNote.TotalAmount, 0, 'POINT', 2, 'COMMA')}">aaaa</span></td>
+              </tr>
+            </tbody></table>
+          </div>
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+
+      <!-- this row will not appear when printing -->
+      <div class="row no-print">
+     
+        <div class="col-xs-12">
+          <a href="invoice-print.html" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</a>
+          <button type="button" class="btn btn-success" id="btn-approve" ><i class=" fa fa-check-square-o "></i> Approve </button>
+          <button type="button" class="btn btn-danger"  id="btn-destroy" ><i class=" fa  fa-close "></i> Destroy </button>
+          <button type="button" class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Submit Payment
+          </button>
+          <button type="button" class="btn btn-primary pull-right" style="margin-right: 5px;" id="btn-export">
+            <i class="fa fa-download"></i> Generate PDF
+          </button>
+        </div>
+      </div>
+    </section>
+  </div>
+	 <form  method="post" id="frm-goodsReceiptNote"><input type="hidden" name="id" th:value="${goodsReceiptNote.id}"></form>
+  <!-- /.content-wrapper -->
+  	 <script src="js/goods_receipt_note/info.js"></script> 	 
+    <footer th:replace="admin/fragments/layout :: footer"></footer>
+   <!-- /wapper --> 
+ </div>   
+</body>
+</html>

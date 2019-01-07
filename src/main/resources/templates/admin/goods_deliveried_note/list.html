@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/layout :: head"></head>
+<body class="hold-transition skin-red sidebar-mini">
+<div class="wrapper" style="height: auto;">
+    <header th:replace="admin/fragments/layout :: header"></header>
+
+  	 <aside th:replace="admin/fragments/layout :: sidebar" class="main-sidebar"></aside>
+  	 
+  	  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Goods Delivered Note
+        <small>List Item</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="admin"><i class="fa fa-dashboard" ></i> Home</a></li>
+        <li class="active">Goods Delivered Note</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <!-- Main content -->
+    <section class="content">
+
+      <!-- Default box -->
+      <div class="box box-primary">
+      			 		  <!-- /* Handle the flash message */-->
+									    <th:block th:if="${message != null}">
+									        <!-- /* The message code is returned from the @Controller */ -->
+									        <div th:replace="admin/fragments/alert :: alert (type=${#strings.toLowerCase(message.type)}, message=#{${message.message}(${#authentication.name})})">&nbsp;</div>
+									    </th:block>
+									      <!-- /* end Handle the flash message */-->
+        <div class="box-header with-border row">
+        	<form method="get" novalidate="novalidate" th:action="@{admin/goods_deliveried_note}">
+		        <div class="col-md-3">
+		        	<div class="input-group"> <input class="form-control" name="name"> <span class="input-group-btn"> 
+		        	<button class="btn btn-success" type="submit"><i class="fa  fa-search"></i></button> </span> </div>
+		        </div>
+        	</form>
+        </div> 
+        <div class="box-body tb-industry">
+		      <div class="mailbox-controls">
+         
+         		<div class="btn-group">
+                  <a  class="btn btn-primary btn-sm" th:href="@{admin/goods_deliveried_note/add}"><i class="fa fa-plus"></i> Create New Item</a>
+                </div>
+               
+               
+ 
+              </div>
+            <form id="frm-table-industry" novalidate="novalidate" method="post" style=" overflow-y: auto;">
+           	<table class="table table-hover table-bordered">
+                <thead><tr>
+               <th class="text-center" style="vertical-align: middle"  width="55">Edit</th>
+               		<th class="text-center" style="vertical-align: middle">#ID</th>
+               		  <th class="text-center" style="vertical-align: middle">#DocumentNo</th>
+               		    <th class="text-center" style="vertical-align: middle">#TypeofNote</th>
+               		     <th class="text-center" style="vertical-align: middle">#FromLogicWarehouse</th>
+               		     <th class="text-center" style="vertical-align: middle">#ToLogicWarehouse</th>
+               		      <th class="text-center" style="vertical-align: middle">TotalQuantity</th>   
+               		        <th class="text-center" style="vertical-align: middle">TotalAmount</th>    
+                	  <th class="text-center" style="vertical-align: middle">Created Date</th> 
+                   <th class="text-center" style="vertical-align: middle"  width="100">Checked Status</th>
+                </tr>
+              <thead>
+              <tbody>
+              		<tr  th:each="goodsDeliveriedNote:${goodsDeliveriedNotes}">
+              			<td class="text-center" style="vertical-align: middle"><a th:href="@{'admin/goods_deliveried_note/edit/' + ${goodsDeliveriedNote.id}}"><i class="fa fa-edit"></i></a></td>
+              			<td  ><a target="_blank" th:href="@{'admin/goods_deliveried_note/info/' + ${goodsDeliveriedNote.id}}"> <i class="fa fa-search text-green" ></i> <span th:text="${goodsDeliveriedNote.id}"></span> </a></td>
+              			<td  th:text="${goodsDeliveriedNote.DocumentNo}"></td>
+              			<td  th:text="${goodsDeliveriedNote.TypeofNote}"></td>
+              			<td  th:text="${goodsDeliveriedNote.FromLogicWarehouse}"></td>
+              			<td  th:text="${goodsDeliveriedNote.ToLogicWarehouse}"></td>
+              			<td class="text-right"   th:text="${goodsDeliveriedNote.TotalQuantity}"></td>
+              			<td class="text-right"  th:text="${#numbers.formatDecimal(goodsDeliveriedNote.TotalAmount, 0, 'POINT', 2, 'COMMA')}"></td>
+              				<td  th:text="${#dates.format(goodsDeliveriedNote.CreateDate, 'dd/MM/yyyy')}"></td>
+              		<td class="text-center" style="vertical-align: middle">
+              				<span th:replace="admin/fragments/status :: document(status=${goodsDeliveriedNote.IsCheck})"></span>
+              			</td>
+              			
+              		</tr>
+              </tbody>
+              </table>
+            
+            </form>  
+           
+           
+            
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer ">
+              <div class="mailbox-controls">
+               			<div th:replace="admin/fragments/paginationbar :: paginationbar"></div>
+                <!-- /.pull-right -->
+              </div>
+            </div>
+      </div>
+      <!-- /.box -->
+        
+
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+ <script src="js/goods_deliveried_note/main.js"></script> 	 
+
+    <footer th:replace="admin/fragments/layout :: footer"></footer>
+  <!-- /wapper -->
+  </div>  
+</body>
+</html>

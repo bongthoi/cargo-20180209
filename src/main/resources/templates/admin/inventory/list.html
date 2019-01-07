@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/layout :: head"></head>
+<body class="hold-transition skin-red sidebar-mini">
+<div class="wrapper" style="height: auto;">
+    <header th:replace="admin/fragments/layout :: header"></header>
+
+  	 <aside th:replace="admin/fragments/layout :: sidebar" class="main-sidebar"></aside>
+  	 
+  	  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Inventory
+        <small>List Item</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="admin"><i class="fa fa-dashboard" ></i> Home</a></li>
+        <li class="active">Inventory</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <!-- Main content -->
+    <section class="content">
+
+      <!-- Default box -->
+      <div class="box box-primary" th:fragment="boxgridinventory">
+      			 		  <!-- /* Handle the flash message */-->
+									    <th:block th:if="${message != null}">
+									        <!-- /* The message code is returned from the @Controller */ -->
+									        <div th:replace="admin/fragments/alert :: alert (type=${#strings.toLowerCase(message.type)}, message=#{${message.message}(${#authentication.name})})">&nbsp;</div>
+									    </th:block>
+									      <!-- /* end Handle the flash message */-->
+        <div class="box-header with-border row">
+        	<form method="get" novalidate="novalidate" th:action="@{admin/inventory}" th:object="${inventory}">
+		        <div class="col-md-2">
+		       		<input type="text" class="form-control" placeholder="Product #ID/Name" th:field="*{ProductName}">
+		        </div>
+		         <div class="col-md-2">
+		       		 <select class="form-control"  th:field="*{LogicWarehouseId}" th:errorclass="field-error">
+						         <option value="">- Warehouse -</option>
+									<option th:each="warehouse : ${warehouses}" 
+									 th:value="${warehouse.id}" 
+									 th:disabled="(${warehouse.enabled} == 0)"
+									th:text="${warehouse.name} + (${warehouse.enabled} == 0? '(disabled)':'')">Wireframe</option>
+						</select>
+		        </div>
+		
+		         <div class="col-md-2">
+	           				<button type="submit" class="btn btn-primary">Search</button>
+		        </div>
+        	</form>
+        </div> 
+        <div class="box-body tb-product">
+           	<table class="table table-hover table-bordered">
+                <thead><tr>
+               		<th class="text-center" style="vertical-align: middle">#Warehouse</th>
+               		  <th class="text-center" style="vertical-align: middle">#Product Id</th>
+               		  	  <th class="text-center" style="vertical-align: middle">#Product Code</th>
+               			<th class="text-center" style="vertical-align: middle">Product Name</th>
+               		    <th class="text-center" style="vertical-align: middle">DocumentQuantity</th>
+               		    <th class="text-center" style="vertical-align: middle">RealQuantity </th>
+               		     <th class="text-center" style="vertical-align: middle">ModifyTime </th>
+                </tr>
+              <thead>
+              <tbody>
+              		<tr  th:each="gridinventory,status:${gridinventorys}">
+              			<td  th:text="${gridinventory.LogicWarehouseId}"></td>
+              			<td  th:text="${gridinventory.ProductId}"></td>
+              				<td  th:text="${gridinventory.ProductCode}"></td>
+              			<td  th:text="${gridinventory.ProductName}"></td>
+              			<td class="text-right" th:text="${gridinventory.DocumentQuantity}"></td>
+              			<td class="text-right" th:text="${gridinventory.RealQuantity}"></td>
+              			<td  th:text="${#dates.format(gridinventory.ModifyTime, 'dd/MM/yyyy')}"></td>
+              		
+              		</tr>
+              </tbody>
+              </table>
+
+           <div class="mailbox-controls">
+           			<div th:replace="admin/fragments/paginationbar :: paginationbar"></div>
+                <!-- /.pull-right -->
+              </div>
+            
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+        
+
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper --> 
+
+    <footer th:replace="admin/fragments/layout :: footer"></footer>
+ <!-- /wapper -->
+ </div>   
+</body>
+</html>

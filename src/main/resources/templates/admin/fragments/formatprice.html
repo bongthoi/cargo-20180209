@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+<span th:fragment="format(value)" 
+	th:text="${value} != null AND  ${value}!=0.00 ?  ${#numbers.formatDecimal(value, 0, 'POINT', 2, 'COMMA')} : '0,00'" >
+</span>
+</body>
+</html>

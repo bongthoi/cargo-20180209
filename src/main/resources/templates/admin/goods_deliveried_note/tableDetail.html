@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+
+ 				<table class="table table-hover table-bordered">
+								                <thead>
+									               <tr>
+									               		<th class="text-center" style="vertical-align: middle">#Product ID </th>
+									               		<th class="text-center" style="vertical-align: middle">#Product Code </th>
+									               		  <th class="text-center" style="vertical-align: middle">Product Name</th>
+									               		  <th class="text-center" style="vertical-align: middle">Price</th>
+									                	  <th class="text-center" style="vertical-align: middle">Document Quantity</th>
+									                	    <th class="text-center" style="vertical-align: middle">Real Quantity</th>
+									                	   	<th class="text-center" style="vertical-align: middle"  width="150" >
+									                	   	<button type="button" class="btn btn-success" id="btn-add-detail-goods-delivered-note"><i class="fa fa-plus"></i> Add Product </button></th>
+									                </tr>
+								              	</thead>
+								              <tbody>
+								              		<tr th:fragment="trDetail" class="trDetail">
+								              			<input type="hidden" name="goodsDeliveriedNoteDetails[js_replace0].id"  />
+								              			<input type="hidden" name="goodsDeliveriedNoteDetails[js_replace0].isDelete" value="0" />
+								              			<input type="hidden" name="goodsDeliveriedNoteDetails[js_replace0].Unit" th:value="${product.Unit}" />
+								              			<td ><span th:text="${product.id}"></span>   <input type="hidden" class="form-control" name="goodsDeliveriedNoteDetails[js_replace0].ProductId" th:value="${product.id}"></td>
+								              			<td ><span th:text="${product.ProductCode}"></span>   <input type="hidden" class="form-control" name="goodsDeliveriedNoteDetails[js_replace0].ProductCode" th:value="${product.ProductCode}"></td>
+								              			<td ><span th:text="${product.ProductName}"> </span>  <input type="hidden" class="form-control" name="goodsDeliveriedNoteDetails[js_replace0].ProductName"  th:value="${product.ProductName}"></td>
+								              			<td> <input type="number" class="form-control" name="goodsDeliveriedNoteDetails[js_replace0].Price"  th:value="${product.SellPrice}" ></td>
+								              			<td> <input type="number" class="form-control" name="goodsDeliveriedNoteDetails[js_replace0].DocumentQuantity" value="1" pattern="[0-9]+"></td>
+								              			<td> <input type="number" class="form-control" name="goodsDeliveriedNoteDetails[js_replace0].RealQuantity" value="1"  pattern="[0-9]"  ></td>
+								              			<td class="text-center" style="vertical-align: middle" ><button class="btn btn-danger btn-sm " type="button" onclick="remove_tr(this);"><i class="fa  fa-trash-o"></i></button></td>
+								              		</tr>
+								              </tbody>
+							              </table>
+</body>

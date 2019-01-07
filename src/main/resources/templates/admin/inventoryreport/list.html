@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/layout :: head"></head>
+<body class="hold-transition skin-red sidebar-mini">
+	<div class="wrapper" style="height: auto;">
+		<header th:replace="admin/fragments/layout :: header"></header>
+
+		<aside th:replace="admin/fragments/layout :: sidebar"
+			class="main-sidebar"></aside>
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<section class="content-header">
+				<h1>
+					Inventory <small>Report</small>
+				</h1>
+				<ol class="breadcrumb">
+					<li><a href="admin"><i class="fa fa-dashboard"></i> Home</a></li>
+					<li class="">Inventory</li>
+					<li class="active">Report</li>
+				</ol>
+			</section>
+
+			<!-- Main content -->
+			<!-- Main content -->
+			<section class="content">
+				<!-- Custom Tabs -->
+				<div class="nav-tabs-custom">
+					<ul class="nav nav-tabs">
+						<li class="active"><a href="#tab_1" data-toggle="tab">Detail
+								info</a></li>
+						<li><a href="#tab_2" data-toggle="tab">Closing the period</a></li>
+
+					</ul>
+					<div class="tab-content">
+						<div class="tab-pane active" id="tab_1">
+							<div class="row">
+
+								<form class="form-horizontal"
+									th:action="@{admin/inventory/report}"
+									th:object="${inventoryReportSearch}">
+									<div class="col-md-4">
+										<div class="form-group">
+											<label class="col-sm-4 control-label">Fillter By</label>
+
+											<div class="col-sm-8">
+												<select class="form-control" th:field="*{fillterBy}">
+													<option th:each="fillter : ${filltersby}"
+														th:value="${fillter.value}" th:text="${fillter.name}">Wireframe</option>
+												</select>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-4 control-label"> Date</label>
+
+											<div class="col-sm-8">
+												<input type="text" class="form-control"
+													th:field="*{forDate}">
+											</div>
+										</div>
+
+										<div class="form-group">
+											<label class="col-sm-4 control-label">Period</label>
+											<div class="col-sm-8">
+												<select class="form-control" th:field="*{forPeriod}">
+													<option value="0">- Period -</option>
+													<option th:each="period : ${inventoryReportHistorys}"
+														th:value="${period.id}"
+														th:text="${period.name} +' | '+ ${#dates.format(period.beginning_date, 'dd/MM/yyyy')} 
+															+' - ' + ${#dates.format(period.ending_date, 'dd/MM/yyyy')}">Wireframe</option>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group">
+											<label class="col-sm-4 control-label">Warehouse</label>
+
+											<div class="col-sm-8">
+												<select class="form-control" th:field="*{logicwarehouse}">
+													<option value="">---Select---</option>
+													<option th:each="logical_warehouse : ${logical_warehouses}"
+														th:value="${logical_warehouse.id}"
+														th:disabled="(${logical_warehouse.enabled} == 0)"
+														th:text="${logical_warehouse.name} + (${logical_warehouse.enabled} == 0? '(disabled)':'')">Wireframe</option>
+												</select>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-4 control-label">#Code/Name</label>
+
+											<div class="col-sm-8">
+												<input type="text" class="form-control"
+													th:field="*{keyword}">
+											</div>
+										</div>
+
+										<div class="form-group">
+											<label class="col-sm-4 control-label"></label>
+											<div class="col-sm-8">
+												<input type="submit" class="btn btn-primary" value="Fillter">
+											</div>
+										</div>
+									</div>
+								</form>
+
+
+
+							</div>
+							<hr>
+
+							<form method="post" novalidate="novalidate"
+								style="overflow-y: auto;">
+								<table class="table table-hover table-bordered">
+									<thead>
+										<tr>
+											<th class="text-center" style="vertical-align: middle">Date</th>
+												<th class="text-center" style="vertical-align: middle">#Warehouse</th>
+											<th class="text-center" style="vertical-align: middle">#ID</th>
+											<th class="text-center" style="vertical-align: middle">#Product
+												Code</th>
+										<th class="text-center" style="vertical-align: middle">Product
+												Name</th>
+											<th class="text-center" style="vertical-align: middle">Qty
+												Beginning</th>
+											<th class="text-center" style="vertical-align: middle">Price
+												Beginning</th>
+											<th class="text-center" style="vertical-align: middle">Qty
+												Import</th>
+											<th class="text-center" style="vertical-align: middle">Price
+												Import</th>
+											<th class="text-center" style="vertical-align: middle">Qty
+												Export</th>
+											<th class="text-center" style="vertical-align: middle">Price
+												Export</th>
+											<th class="text-center" style="vertical-align: middle">Qty
+												Ending</th>
+											<th class="text-center" style="vertical-align: middle">Price
+												Ending</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="report,status:${inventoryreports}">
+											<td class="text-center" style="vertical-align: middle" th:text="${#dates.format(report.CreateDate, 'dd/MM/yyyy')}">07/08/2017</td>
+											<td th:text="${report.LogicWarehouseId}">43556</td>
+											<td th:text="${report.ProductId}">PN-00000000049</td>
+											<td th:text="${report.ProductCode}">43556</td>
+											<td th:text="${report.ProductName}">1</td>
+											<td th:text="${report.QtyBeginning}" class="text-right"> </td>
+											<td class="text-right"><span th:replace="admin/fragments/formatprice :: format(value=${report.PriceBeginning})"></span></td>
+											<td th:text="${report.QtyImport}" class="text-right">1</td>
+											<td  class="text-right"><span th:replace="admin/fragments/formatprice :: format(value=${report.PriceImport})"></span></td>
+											<td th:text="${report.QtyExport}" class="text-right">1</td>
+											<td  class="text-right"><span th:replace="admin/fragments/formatprice :: format(value=${report.PriceExport})"></span></td>
+											<td th:text="${report.QtyEnding}" class="text-right">56456546</td>
+											<td  class="text-right"><span th:replace="admin/fragments/formatprice :: format(value=${report.PriceEnding})"></span></td>
+										</tr>
+
+
+									</tbody>
+								</table>
+
+							</form>
+							<div class="mailbox-controls">
+								<div th:replace="admin/fragments/paginationbar :: paginationbar"></div>
+							</div>
+						</div>
+
+						<!-- /.tab-pane -->
+						<div class="tab-pane" id="tab_2">
+							<div class="row">
+								<div class="col-md-4 col-md-offset-4">
+								<div id="alertAjax"></div>
+									<form class="form-horizontal" id="frmClosePeriod">
+										<div class="box-body">
+											<div class="form-group">
+												<label class="col-sm-4 control-label">Period Name</label>
+
+												<div class="col-sm-8">
+													<input type="text" class="form-control" name="name" required="required">
+												</div>
+											</div>
+										</div>
+										<!-- /.box-body -->
+										<div class="box-footer">
+											<button type="submit" class="btn btn-info pull-right">Submit</button>
+										</div>
+										<!-- /.box-footer -->
+									</form>
+
+
+								</div>
+
+							</div>
+						</div>
+
+					</div>
+					<!-- /.tab-content -->
+				</div>
+
+
+			</section>
+			<!-- /.content -->
+		</div>
+		<!-- /.content-wrapper -->
+
+		<footer th:replace="admin/fragments/layout :: footer"></footer>
+
+		<script th:inline="javascript">
+	/*<![CDATA[*/
+	          
+		      $(function () {
+		    	  //forDate
+		    	  $("#forDate").datepicker({
+				      autoclose: true,
+				      format: 'yyyy-mm-dd'
+				    });
+		    	  
+		    	  //$.post("")
+		    		$('#frmClosePeriod').submit(function(event) {
+		    			closePeriod(event);
+		    		});
+		    		 function closePeriod(event){
+		    				event.preventDefault();
+							var name=$('#frmClosePeriod input[name="name"]').val();
+							$.post("/admin/inventory/report/closePeriod",{'name':name},function(data){
+								$("#alertAjax").html(data);
+								return ;
+							});
+							return ;
+						}
+		      });      
+		           
+	   /*]]>*/ 
+    </script>
+		<!-- /wapper -->
+	</div>
+</body>
+</html>
